@@ -3,8 +3,6 @@ import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
 import FilmItem from "./FilmItem";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
 import MyActivityIndicator from "./MyActivityIndicator";
-import Navigation from "../Navigation/Navigation";
-
 
 const Search = (props) => {
 	
