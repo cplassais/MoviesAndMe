@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, Button } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	ScrollView,
+	Image,
+	TouchableOpacity,
+	Button,
+} from "react-native";
 import { getFilmDetailFromApi, getImageFromApi } from "../API/TMDBApi";
 import MyActivityIndicator from "./MyActivityIndicator";
 import moment from "moment";
@@ -7,28 +15,39 @@ import numeral from "numeral";
 import { connect } from "react-redux";
 
 const FilmDetail = (props) => {
-      const [state, setState] = useState({
-            film: undefined,
-            isLoading: true,
-      });
-      useEffect(() => {
-            getFilmDetailFromApi(props.navigation.state.params.idFilm).then((data) => {
-                  setState({
-                        film: data,
-                        isLoading: false,
-                  });
-            });
-      }, []);
-      const _toggleFavorite = () => {
-            const action = { type: "TOGGLE_FAVORITE", value: state.film }
-            props.dispatch(action)
-            
-      }
-      // const componentDidUpdate = () => {
-      //       console.log('************************************', props.favoritesFilm)
-      // }
-      const _displayFilm = () => {
-            const film = state.film
+	const [state, setState] = useState({
+		film: undefined,
+		isLoading: true,
+	});
+	useEffect(() => {
+		getFilmDetailFromApi(props.navigation.state.params.idFilm).then((data) => {
+			setState({
+				film: data,
+				isLoading: false,
+			});
+		});
+	}, []);
+	const _toggleFavorite = () => {
+		const action = { type: "TOGGLE_FAVORITE", value: state.film };
+		props.dispatch(action);
+	};
+	// const componentDidUpdate = () => {
+	//       console.log('************************************', props.favoritesFilm)
+	// }
+	// const _displayFavoriteImage = () => {
+      //       var sourceImage = require("../Images/favorite.png");
+      //       console.log("IMAGE PROPS", props.favoritesFilm);
+	// 	if (
+	// 		props.favoritesFilm.findIndex(item => item.id === state.film.id) !== -1
+	// 	) {
+	// 		// Film dans nosr favoris
+	// 		sourceImage = require("../Images/no_favorite.png");
+	// 	}
+	// 	return (<Image style={styles.favorite_image} source={sourceImage} />);
+	// };
+
+	const _displayFilm = () => {
+		const film = state.film;
 		if (film != undefined) {
 			return (
 				<ScrollView style={styles.scrollview_container}>
@@ -76,8 +95,8 @@ const FilmDetail = (props) => {
 				</ScrollView>
 			);
 		}
-      };
-      console.log(props)
+	};
+	console.log(props);
 	return (
 		<View style={styles.main_container}>
 			{_displayFilm()}
@@ -128,14 +147,18 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 		marginRight: 5,
 		marginTop: 5,
-      },
-      favorites_container: {
-            alignItems: "center",
-      }
+	},
+	favorite_container: {
+		alignItems: "center",
+	},
+	favorite_image: {
+		width: 40,
+		height: 40,
+	},
 });
 const mapStateToProps = (state) => {
-      return {
-            favoritesFilm: state.Film
-      }
-}
+	return {
+		favoritesFilm: state.Film,
+	};
+};
 export default connect(mapStateToProps)(FilmDetail);
