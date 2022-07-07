@@ -1,23 +1,23 @@
-import react, { useState, useCallback } from "react";
+import react, { useState } from "react";
 import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
 import FilmItem from "./FilmItem";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
 import MyActivityIndicator from "./MyActivityIndicator";
+import { connect } from "react-redux";
 
 const Search = (props) => {
-	
 	const _displayDetailForFilm = (idFilm) => {
-		props.navigation.navigate("FilmDetail", {idFilm: idFilm})
-	}
-	const [page, setPage] = useState(0)
-	const [totalPages, setTotalPages] = useState(0)
+		props.navigation.navigate("FilmDetail", { idFilm: idFilm });
+	};
+	const [page, setPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
 	const [state, setState] = useState({
 		films: [],
 		isLoading: false,
 	});
 	const [searchedText, setSearchedText] = useState("");
 	const _searchFilms = () => {
-			_loadFilms();	
+		_loadFilms();
 	};
 	const _loadFilms = () => {
 		if (searchedText.length > 0) {
@@ -63,8 +63,21 @@ const Search = (props) => {
 			) : (
 				<FlatList
 					data={state.films}
+					extraData={props.favoritesFilm}
 					keyExtractor={(item) => item.id.toString()}
-					renderItem={({ item }) => <FilmItem film={item} displayDetailForFilm={_displayDetailForFilm} />}
+					renderItem={({ item }) => (
+						<FilmItem
+							film={item}
+							isFilmFavorite={
+								props.favoritesFilm.findIndex(
+									(film) => film.id === item.id
+								) !== -1
+									? true
+									: false
+							}
+							displayDetailForFilm={_displayDetailForFilm}
+						/>
+					)}
 					onEndReachedThreshold={0.5}
 					onEndReached={() => {
 						if (page < totalPages) {
@@ -97,4 +110,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 });
-export default Search;
+const mapStateToProps = (state) => {
+	return {
+		favoritesFilm: state.favoritesFilm,
+	};
+};
+
+export default connect(mapStateToProps)(Search);
