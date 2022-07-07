@@ -5,8 +5,7 @@ import {
 	Text,
 	ScrollView,
 	Image,
-	TouchableOpacity,
-	Button,
+	TouchableOpacity
 } from "react-native";
 import { getFilmDetailFromApi, getImageFromApi } from "../API/TMDBApi";
 import MyActivityIndicator from "./MyActivityIndicator";
@@ -34,17 +33,16 @@ const FilmDetail = (props) => {
 	// const componentDidUpdate = () => {
 	//       console.log('************************************', props.favoritesFilm)
 	// }
-	// const _displayFavoriteImage = () => {
-      //       var sourceImage = require("../Images/favorite.png");
-      //       console.log("IMAGE PROPS", props.favoritesFilm);
-	// 	if (
-	// 		props.favoritesFilm.findIndex(item => item.id === state.film.id) !== -1
-	// 	) {
-	// 		// Film dans nosr favoris
-	// 		sourceImage = require("../Images/no_favorite.png");
-	// 	}
-	// 	return (<Image style={styles.favorite_image} source={sourceImage} />);
-	// };
+	const _displayFavoriteImage = () => {
+		var sourceImage = require("../Images/favorite.png");
+		if (
+                  props.favoritesFilm === undefined ? null : props.favoritesFilm.findIndex(item => item.id === state.film.id) === -1
+                  ) {
+                        // Film dans nos favoris
+			sourceImage = require("../Images/no_favorite.png");
+		}
+		return <Image style={styles.favorite_image} source={sourceImage} />;
+	};
 
 	const _displayFilm = () => {
 		const film = state.film;
@@ -56,13 +54,13 @@ const FilmDetail = (props) => {
 						source={{ uri: getImageFromApi(film.backdrop_path) }}
 					/>
 					<Text style={styles.title_text}>{film.title}</Text>
-					<Button onPress={() => _toggleFavorite()} title={"Favori"}></Button>
-					{/* <TouchableOpacity
+					{/* <Button onPress={() => _toggleFavorite()} title={"Favori"}></Button> */}
+					<TouchableOpacity
 						style={styles.favorite_container}
-						onPress={() => _toggleFavorite()}
+						onPress={_toggleFavorite}
 					>
 						{_displayFavoriteImage()}
-					</TouchableOpacity> */}
+					</TouchableOpacity>
 					<Text style={styles.description_text}>{film.overview}</Text>
 					<Text style={styles.default_text}>
 						Sorti le {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
@@ -96,7 +94,6 @@ const FilmDetail = (props) => {
 			);
 		}
 	};
-	console.log(props);
 	return (
 		<View style={styles.main_container}>
 			{_displayFilm()}
@@ -157,8 +154,9 @@ const styles = StyleSheet.create({
 	},
 });
 const mapStateToProps = (state) => {
-	return {
-		favoritesFilm: state.Film,
-	};
+	// return {
+	// 	favoritesFilm: state.Film,
+	// };
+      return state
 };
 export default connect(mapStateToProps)(FilmDetail);

@@ -11,7 +11,6 @@ const toggleFavorite = (state = initialState, action) => {
                     ...state,
                     favoritesFilm: state.favoritesFilm.filter((item, index) => index !== favoriteFilmIndex)
                 }
-                console.log("SUPPRESSION");
             }
             else {
                 // ajouter
@@ -19,7 +18,6 @@ const toggleFavorite = (state = initialState, action) => {
                     ...state,
                     favoritesFilm: [ ...state.favoritesFilm, action.value]
                 }
-                console.log("AJOUT",nextState.favoritesFilm.map(item =>item.id));
             }
             return nextState || state
         default:
